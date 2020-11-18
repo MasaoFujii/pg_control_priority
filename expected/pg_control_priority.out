@@ -1,0 +1,22 @@
+CREATE EXTENSION pg_control_priority;
+\pset null '(null)'
+SET pg_control_priority.scheduling_priority TO 1;
+SELECT pg_get_priority(pg_backend_pid());
+ pg_get_priority 
+-----------------
+               1
+(1 row)
+
+SELECT pg_set_priority(pg_backend_pid(), 2);
+ pg_set_priority 
+-----------------
+ 
+(1 row)
+
+SHOW pg_control_priority.scheduling_priority;
+ pg_control_priority.scheduling_priority 
+-----------------------------------------
+ 2
+(1 row)
+
+DROP EXTENSION pg_control_priority;
