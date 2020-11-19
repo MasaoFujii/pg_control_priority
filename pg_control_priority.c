@@ -41,14 +41,28 @@ static const char *show_scheduling_priority(void);
 void
 _PG_init(void)
 {
-	/* Define custom GUC variable. */
+	/* Define custom GUC variable */
+
+	/*
+	 * We don't accept a priority value in range between -20 and -1
+	 * while setpriority(2) does. Because the default priority of
+	 * a process is zero, and only root user may lower the priority
+	 * but PostgreSQL is not allowed to run as root. Therefore we
+	 * use zero as a minimum allowed setting value.
+	 *
+	 * The maximum priority value that setpriority(2) can set varies
+	 * on systems, 19 in Linux but 20 in other systems like MacOS.
+	 * Therefore we allow this parameter to accept 20 as a maximum
+	 * priority. If 20 is set in Linux, 19 is used as the actual priority,
+	 * instead.
+	 */
 	DefineCustomIntVariable("pg_control_priority.scheduling_priority",
 							"Set the scheduling priorities of PostgreSQL server processes.",
 							NULL,
 							&scheduling_priority,
 							0,
 							0,
-							19,
+							20,
 							PGC_USERSET,
 							0,
 							NULL,

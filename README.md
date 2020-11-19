@@ -56,7 +56,8 @@ Set the scheduling priority ("nice") of the specified PostgreSQL
 server process to the specified value. This function can change
 the priority of postmaster, backend, or auxiliary process.
 
-Valid priority values are between 0 and 19.
+Valid priority values are between 0 and 19 in Linux,
+and between 0 and 20 in other systems like MacOS.
 Lower value than the current priority cannot be specified.
 See getpriority(2) man page for details about a scheduling priority.
 
@@ -78,7 +79,8 @@ if you want to use the configuration parameters which this extension provides.
 ### pg_control_priority.scheduling_priority (integer)
 
 Specify the scheduling priorities ("nice") of PostgreSQL server processes.
-Valid priority values are between 0 and 19.
+Valid priority values are between 0 and 19 in Linux,
+and between 0 and 20 in other systems like MacOS.
 Lower value than the current priority cannot be specified.
 The default value is zero.
 See getpriority(2) man page for details about a scheduling priority.
