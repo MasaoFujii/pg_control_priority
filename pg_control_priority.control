@@ -1,5 +1,5 @@
 # pg_control_priority extension
-comment = 'control the priority of PostgreSQL server process'
+comment = 'control the priorities of PostgreSQL server processes'
 default_version = '1.0'
 module_pathname = '$libdir/pg_control_priority'
 relocatable = true

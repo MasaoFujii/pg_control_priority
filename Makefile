@@ -3,7 +3,7 @@ OBJS = pg_control_priority.o
 
 EXTENSION = pg_control_priority
 DATA = pg_control_priority--1.0.sql
-PGFILEDESC = "pg_control_priority - controls the priority of PostgreSQL server process"
+PGFILEDESC = "pg_control_priority - controls the priorities of PostgreSQL server processes"
 
 REGRESS = pg_control_priority
 

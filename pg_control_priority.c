@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * pg_control_priority.c
- *   controls the priority of PostgreSQL process
+ *   controls the priorities of PostgreSQL server processes
  *
  *-------------------------------------------------------------------------
  */
