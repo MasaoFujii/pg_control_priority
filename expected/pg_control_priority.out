@@ -19,4 +19,11 @@ SHOW pg_control_priority.scheduling_priority;
  2
 (1 row)
 
+SET pg_control_priority.scheduling_priority TO 20;
+SELECT pg_get_priority(pg_backend_pid()) >= 19;
+ ?column? 
+----------
+ t
+(1 row)
+
 DROP EXTENSION pg_control_priority;
