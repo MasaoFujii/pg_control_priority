@@ -43,11 +43,11 @@ _PG_init(void)
 {
 	/* Define custom GUC variable. */
 	DefineCustomIntVariable("pg_control_priority.scheduling_priority",
-							"Set the scheduling priority of PostgreSQL server process.",
+							"Set the scheduling priorities of PostgreSQL server processes.",
 							NULL,
 							&scheduling_priority,
 							0,
-							-20,
+							0,
 							19,
 							PGC_USERSET,
 							0,

@@ -1,15 +1,17 @@
 # pg_control_priority
-This extension provides the ability to control the scheduling priority
-("nice") of PostgreSQL server process.
 
-pg_control_priority is released under the
+This extension provides the ability to control the scheduling priorities
+("nice") of PostgreSQL server processes.
+
+This extension is released under the
 [PostgreSQL License](https://opensource.org/licenses/postgresql),
 a liberal Open Source license, similar to the BSD or MIT licenses.
 
-pg_control_priority requires PostgreSQL 10 or later.
+This extension requires PostgreSQL 10 or later.
 
 ## Test Status
-[![Build Status](https://travis-ci.org/MasaoFujii/pg_control_priority.svg?branch=master)](https://travis-ci.org/MasaoFujii/pg_control_priority)
+
+![build](https://github.com/MasaoFujii/pg_control_priority/workflows/build/badge.svg)
 
 ## Install
 
@@ -39,20 +41,32 @@ this extension provides.
     =# CREATE EXTENSION pg_control_priority;
 
 ### integer pg_get_priority(pid int)
+
 Return the scheduling priority ("nice") of the specified PostgreSQL
 server process. This function can get the priority of postmaster,
 backend, or auxiliary process.
 See getpriority(2) man page for details about a scheduling priority.
+
 This function is restricted to superusers by default,
 but other users can be granted EXECUTE to run the function.
 
 ### void pg_set_priority(pid int, priority int)
+
 Set the scheduling priority ("nice") of the specified PostgreSQL
 server process to the specified value. This function can change
 the priority of postmaster, backend, or auxiliary process.
+
+Valid priority values are between 0 and 19.
+Lower value than the current priority cannot be specified.
 See getpriority(2) man page for details about a scheduling priority.
+
 This function is restricted to superusers by default,
 but other users can be granted EXECUTE to run the function.
+
+Note that this extension doesn't accept a priority value in range
+between -20 and -1 while setpriority(2) does. Because the default
+priority is zero, and only root may lower the priority but PostgreSQL
+is not allowed to run as root.
 
 ## Configuration Parameters
 
@@ -62,9 +76,11 @@ must be set to 'pg_control_priority' in postgresql.conf
 if you want to use the configuration parameters which this extension provides.
 
 ### pg_control_priority.scheduling_priority (integer)
-Specify the scheduling priority ("nice") of PostgreSQL server process.
-Valid values are between -20 and 19.
-Lower values cause more favorable scheduling.
+
+Specify the scheduling priorities ("nice") of PostgreSQL server processes.
+Valid priority values are between 0 and 19.
+Lower value than the current priority cannot be specified.
 The default value is zero.
-Any users can change this setting.
 See getpriority(2) man page for details about a scheduling priority.
+
+Any users can change this setting.
