@@ -47,7 +47,13 @@ jobs:
     - name: script
       run: |
         make USE_PGXS=1 PG_CONFIG=${PGHOME}/bin/pg_config installcheck
-    - name: after_script
+    - name: after_script_failure
+      if: failure()
       run: |
         if [ -f regression.diffs ]; then cat regression.diffs; fi
+        pg_ctl -D ${PGDATA} stop
+        exit 1
+    - name: after_script_success
+      if: success()
+      run: |
         pg_ctl -D ${PGDATA} stop
