@@ -19,7 +19,7 @@
 PG_MODULE_MAGIC;
 
 /* GUC variable */
-static int		scheduling_priority = 0;
+static int	scheduling_priority = 0;
 
 PG_FUNCTION_INFO_V1(pg_get_priority);
 PG_FUNCTION_INFO_V1(pg_set_priority);
@@ -27,10 +27,10 @@ PG_FUNCTION_INFO_V1(pg_set_priority);
 void		_PG_init(void);
 void		_PG_fini(void);
 
-static int GetProcessPriority(int pid, int elevel);
+static int	GetProcessPriority(int pid, int elevel);
 static void SetProcessPriority(int pid, int priority, int elevel);
 static void CheckPostgresPid(int pid);
-static bool	IsAuxiliaryPid(int pid);
+static bool IsAuxiliaryPid(int pid);
 
 static void assign_scheduling_priority(int newval, void *extra);
 static const char *show_scheduling_priority(void);
@@ -44,17 +44,16 @@ _PG_init(void)
 	/* Define custom GUC variable */
 
 	/*
-	 * We don't accept a priority value in range between -20 and -1
-	 * while setpriority(2) does. Because the default priority of
-	 * a process is zero, and only root user may lower the priority
-	 * but PostgreSQL is not allowed to run as root. Therefore we
-	 * use zero as a minimum allowed setting value.
+	 * We don't accept a priority value in range between -20 and -1 while
+	 * setpriority(2) does. Because the default priority of a process is zero,
+	 * and only root user may lower the priority but PostgreSQL is not allowed
+	 * to run as root. Therefore we use zero as a minimum allowed setting
+	 * value.
 	 *
-	 * The maximum priority value that setpriority(2) can set varies
-	 * on systems, 19 in Linux but 20 in other systems like MacOS.
-	 * Therefore we allow this parameter to accept 20 as a maximum
-	 * priority. If 20 is set in Linux, 19 is used as the actual priority,
-	 * instead.
+	 * The maximum priority value that setpriority(2) can set varies on
+	 * systems, 19 in Linux but 20 in other systems like MacOS. Therefore we
+	 * allow this parameter to accept 20 as a maximum priority. If 20 is set
+	 * in Linux, 19 is used as the actual priority, instead.
 	 */
 	DefineCustomIntVariable("pg_control_priority.scheduling_priority",
 							"Set the scheduling priorities of PostgreSQL server processes.",
@@ -86,8 +85,8 @@ _PG_fini(void)
 Datum
 pg_get_priority(PG_FUNCTION_ARGS)
 {
-	int		pid = PG_GETARG_INT32(0);
-	int		priority;
+	int			pid = PG_GETARG_INT32(0);
+	int			priority;
 
 	CheckPostgresPid(pid);
 	priority = GetProcessPriority(pid, ERROR);
@@ -100,8 +99,8 @@ pg_get_priority(PG_FUNCTION_ARGS)
 Datum
 pg_set_priority(PG_FUNCTION_ARGS)
 {
-	int		pid = PG_GETARG_INT32(0);
-	int		priority = PG_GETARG_INT32(1);
+	int			pid = PG_GETARG_INT32(0);
+	int			priority = PG_GETARG_INT32(1);
 
 	CheckPostgresPid(pid);
 	SetProcessPriority(pid, priority, ERROR);
@@ -114,8 +113,8 @@ pg_set_priority(PG_FUNCTION_ARGS)
 static int
 GetProcessPriority(int pid, int elevel)
 {
-	int	priority = 0;
-	int	save_errno = errno;
+	int			priority = 0;
+	int			save_errno = errno;
 
 	errno = 0;
 	priority = getpriority(PRIO_PROCESS, pid);
@@ -133,7 +132,7 @@ GetProcessPriority(int pid, int elevel)
 static void
 SetProcessPriority(int pid, int priority, int elevel)
 {
-	int	save_errno = errno;
+	int			save_errno = errno;
 
 	if (setpriority(PRIO_PROCESS, pid, priority) != 0)
 		ereport(elevel,
